@@ -45,3 +45,6 @@ $bg = $_COOKIE['bg'];
         This is your customized web page!
     </p>
 </body>
+
+
+run: http://localhost/page1.php
