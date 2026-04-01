@@ -26,7 +26,7 @@ CREATE TABLE Event_Committee (
 *event_commit.php
 
 <?php
-$conn = mysqli_connect("localhost", "root", "", "test");
+$conn = pg_connect("host=localhost dbname=test user=postgres password=yourpassword");
 
 if(!$conn)
 {
@@ -37,16 +37,19 @@ if(isset($_POST['submit']))
 {
     $title = $_POST['title'];
 
-    // Update query using JOIN
+    // PostgreSQL UPDATE (no JOIN directly)
     $query = "
-    UPDATE Committee c
-    JOIN Event_Committee ec ON c.cno = ec.cno
-    JOIN Event e ON e.eno = ec.eno
-    SET c.status = 'Working'
-    WHERE e.title = '$title'
+    UPDATE Committee
+    SET status = 'Working'
+    WHERE cno IN (
+        SELECT ec.cno
+        FROM Event_Committee ec
+        JOIN Event e ON e.eno = ec.eno
+        WHERE e.title = '$title'
+    )
     ";
 
-    if(mysqli_query($conn, $query))
+    if(pg_query($conn, $query))
     {
         echo "Status updated successfully!";
     }
