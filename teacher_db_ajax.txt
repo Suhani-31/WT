@@ -59,12 +59,12 @@ Select Teacher:
 
 *getteacher.php
 <?php
-$conn = mysqli_connect("localhost", "root", "", "test");
+$conn = pg_connect("host=localhost dbname=test user=postgres password=yourpassword");
 
 $tname = $_GET['tname'];
 
 $query = "SELECT * FROM teacher WHERE tname='$tname'";
-$result = mysqli_query($conn, $query);
+$result = pg_query($conn, $query);
 
 echo "<table border='1'>
 <tr>
@@ -74,7 +74,7 @@ echo "<table border='1'>
 <th>Salary</th>
 </tr>";
 
-while($row = mysqli_fetch_assoc($result))
+while($row = pg_fetch_assoc($result))
 {
     echo "<tr>";
     echo "<td>".$row['tno']."</td>";
@@ -86,3 +86,5 @@ while($row = mysqli_fetch_assoc($result))
 
 echo "</table>";
 ?>
+
+run: http://localhost/index.html
