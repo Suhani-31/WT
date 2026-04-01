@@ -1,0 +1,63 @@
+*database
+
+CREATE TABLE Event (
+    eno INT PRIMARY KEY,
+    title VARCHAR(50),
+    date DATE
+);
+
+CREATE TABLE Committee (
+    cno INT PRIMARY KEY,
+    name VARCHAR(50),
+    head VARCHAR(50),
+    from_time TIME,
+    to_time TIME,
+    status VARCHAR(20)
+);
+
+CREATE TABLE Event_Committee (
+    eno INT,
+    cno INT,
+    PRIMARY KEY (eno, cno),
+    FOREIGN KEY (eno) REFERENCES Event(eno),
+    FOREIGN KEY (cno) REFERENCES Committee(cno)
+);
+
+*event_commit.php
+
+<?php
+$conn = mysqli_connect("localhost", "root", "", "test");
+
+if(!$conn)
+{
+    die("Connection Failed");
+}
+
+if(isset($_POST['submit']))
+{
+    $title = $_POST['title'];
+
+    // Update query using JOIN
+    $query = "
+    UPDATE Committee c
+    JOIN Event_Committee ec ON c.cno = ec.cno
+    JOIN Event e ON e.eno = ec.eno
+    SET c.status = 'Working'
+    WHERE e.title = '$title'
+    ";
+
+    if(mysqli_query($conn, $query))
+    {
+        echo "Status updated successfully!";
+    }
+    else
+    {
+        echo "Error updating status";
+    }
+}
+?>
+
+<form method="post">
+Enter Event Title: <input type="text" name="title">
+<input type="submit" name="submit" value="Update">
+</form>

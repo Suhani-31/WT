@@ -1,0 +1,91 @@
+*database
+CREATE TABLE Student (
+    stud_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    class VARCHAR(20)
+);
+
+CREATE TABLE Competition (
+    c_no INT PRIMARY KEY,
+    c_name VARCHAR(50),
+    type VARCHAR(30)
+);
+
+CREATE TABLE Participation (
+    stud_id INT,
+    c_no INT,
+    rank INT,
+    year INT,
+    PRIMARY KEY (stud_id, c_no),
+    FOREIGN KEY (stud_id) REFERENCES Student(stud_id),
+    FOREIGN KEY (c_no) REFERENCES Competition(c_no)
+);
+
+INSERT INTO Student VALUES
+(1, 'Rahul', 'TY'),
+(2, 'Sneha', 'SY'),
+(3, 'Amit', 'TY');
+
+INSERT INTO Competition VALUES
+(101, 'Coding', 'Technical'),
+(102, 'Quiz', 'Academic');
+
+INSERT INTO Participation VALUES
+(1, 101, 1, 2024),
+(2, 101, 2, 2024),
+(3, 102, 1, 2024);
+
+*stud_comp.php
+<?php
+$conn = mysqli_connect("localhost", "root", "", "test");
+
+// Check connection
+if(!$conn)
+{
+    die("Connection failed");
+}
+
+if(isset($_POST['submit']))
+{
+    $cname = $_POST['cname'];
+
+    $query = "
+    SELECT s.stud_id, s.name, s.class, c.c_name, p.rank, p.year
+    FROM Student s
+    JOIN Participation p ON s.stud_id = p.stud_id
+    JOIN Competition c ON c.c_no = p.c_no
+    WHERE c.c_name = '$cname' AND p.rank = 1
+    ";
+
+    $result = mysqli_query($conn, $query);
+
+    echo "<table border='1'>
+    <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Class</th>
+    <th>Competition</th>
+    <th>Rank</th>
+    <th>Year</th>
+    </tr>";
+
+    while($row = mysqli_fetch_assoc($result))
+    {
+        echo "<tr>";
+        echo "<td>".$row['stud_id']."</td>";
+        echo "<td>".$row['name']."</td>";
+        echo "<td>".$row['class']."</td>";
+        echo "<td>".$row['c_name']."</td>";
+        echo "<td>".$row['rank']."</td>";
+        echo "<td>".$row['year']."</td>";
+        echo "</tr>";
+    }
+
+    echo "</table>";
+}
+?>
+
+<form method="post">
+Enter Competition Name: <input type="text" name="cname">
+<input type="submit" name="submit" value="Search">
+</form>
