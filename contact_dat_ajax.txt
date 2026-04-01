@@ -1,0 +1,73 @@
+*contact.dat
+1,Rahul,0201234567,9876543210,Pune
+2,Sneha,0222345678,9123456780,Mumbai
+3,Amit,0253456789,9988776655,Nashik
+
+*index.html
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function loadData()
+{
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("output").innerHTML = this.responseText;
+        }
+    };
+
+    xhttp.open("GET", "read.php", true);
+    xhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+<button onclick="loadData()">Print</button>
+
+<div id="output"></div>
+
+</body>
+</html>
+
+
+*read.php
+<?php
+$file = fopen("contact.dat", "r");
+
+echo "<table border='1'>
+<tr>
+<th>Sr No</th>
+<th>Name</th>
+<th>Residence No</th>
+<th>Mobile No</th>
+<th>Address</th>
+</tr>";
+
+while(!feof($file))
+{
+    $line = fgets($file);
+
+    if($line != "")
+    {
+        $data = explode(",", $line);
+
+        echo "<tr>";
+        echo "<td>".$data[0]."</td>";
+        echo "<td>".$data[1]."</td>";
+        echo "<td>".$data[2]."</td>";
+        echo "<td>".$data[3]."</td>";
+        echo "<td>".$data[4]."</td>";
+        echo "</tr>";
+    }
+}
+
+echo "</table>";
+
+fclose($file);
+?>

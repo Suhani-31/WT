@@ -1,0 +1,103 @@
+*book.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+
+<book>
+<title>Java</title>
+<author>Balguru Swami</author>
+<year>2006</year>
+<price>250</price>
+</book>
+
+<book>
+<title>PHP</title>
+<author>S. Kadam</author>
+<year>2009</year>
+<price>350</price>
+</book>
+
+<book>
+<title>C++</title>
+<author>Bjarne Stroustrup</author>
+<year>1994</year>
+<price>400</price>
+</book>
+
+</books>
+
+
+*index.html
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function showBook(str)
+{
+    if(str == "")
+    {
+        document.getElementById("result").innerHTML = "";
+        return;
+    }
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("result").innerHTML = this.responseText;
+        }
+    };
+
+    xhttp.open("GET", "getbook.php?title=" + str, true);
+    xhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+Select Book:
+<select onchange="showBook(this.value)">
+    <option value="">Select</option>
+    <option value="Java">Java</option>
+    <option value="PHP">PHP</option>
+    <option value="C++">C++</option>
+</select>
+
+<div id="result"></div>
+
+</body>
+</html>
+
+
+*getbook.php
+<?php
+$xml = simplexml_load_file("book.xml");
+
+$title = $_GET['title'];
+
+echo "<table border='1'>
+<tr>
+<th>Title</th>
+<th>Author</th>
+<th>Year</th>
+<th>Price</th>
+</tr>";
+
+foreach($xml->book as $b)
+{
+    if($b->title == $title)
+    {
+        echo "<tr>";
+        echo "<td>".$b->title."</td>";
+        echo "<td>".$b->author."</td>";
+        echo "<td>".$b->year."</td>";
+        echo "<td>".$b->price."</td>";
+        echo "</tr>";
+    }
+}
+
+echo "</table>";
+?>

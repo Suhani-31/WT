@@ -1,0 +1,82 @@
+*student.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<students>
+
+<student>
+<rollno>101</rollno>
+<name>Rahul</name>
+<address>Pune</address>
+<college>ABC College</college>
+<course>BSc</course>
+</student>
+
+<student>
+<rollno>102</rollno>
+<name>Sneha</name>
+<address>Mumbai</address>
+<college>XYZ College</college>
+<course>BCA</course>
+</student>
+
+<student>
+<rollno>103</rollno>
+<name>Amit</name>
+<address>Nashik</address>
+<college>ABC College</college>
+<course>BSc</course>
+</student>
+
+<student>
+<rollno>104</rollno>
+<name>Priya</name>
+<address>Nagpur</address>
+<college>XYZ College</college>
+<course>BCA</course>
+</student>
+
+</students>
+
+*student.php
+
+<?php
+$xml = simplexml_load_file("student.xml");
+
+if(isset($_POST['course']))
+{
+    $course = $_POST['course'];
+
+    echo "<h2>Students of Course: $course</h2>";
+
+    echo "<table border='1'>
+    <tr>
+    <th>Roll No</th>
+    <th>Name</th>
+    <th>Address</th>
+    <th>College</th>
+    <th>Course</th>
+    </tr>";
+
+    foreach($xml->student as $s)
+    {
+        if($s->course == $course)
+        {
+            echo "<tr>";
+            echo "<td>" . $s->rollno . "</td>";
+            echo "<td>" . $s->name . "</td>";
+            echo "<td>" . $s->address . "</td>";
+            echo "<td>" . $s->college . "</td>";
+            echo "<td>" . $s->course . "</td>";
+            echo "</tr>";
+        }
+    }
+
+    echo "</table>";
+}
+?>
+
+<!-- FORM (Always outside PHP) -->
+<form method="post">
+Enter Course: <input type="text" name="course">
+<input type="submit" value="Show Students">
+</form>

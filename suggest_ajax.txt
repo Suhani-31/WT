@@ -1,0 +1,77 @@
+index.html
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function showSuggestion(str)
+{
+    if(str.length == 0)
+    {
+        document.getElementById("output").innerHTML = "";
+        return;
+    }
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function()
+    {
+        if(this.readyState == 4 && this.status == 200)
+        {
+            document.getElementById("output").innerHTML = this.responseText;
+        }
+    };
+
+    xhttp.open("GET", "suggest.php?q=" + str, true);
+    xhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+Enter Name: <input type="text" onkeyup="showSuggestion(this.value)">
+
+<p id="output"></p>
+
+</body>
+</html>
+
+*suggest.php
+<?php
+// Array of suggestions
+$names = array("Rahul", "Rohit", "Ramesh", "Sneha", "Sanjay", "Sonal", "Amit", "Ankit");
+
+$q = $_GET['q'];
+$q = strtolower($q);
+
+$suggestion = "";
+
+if($q != "")
+{
+    foreach($names as $name)
+    {
+        // Match starting letters
+        if(stristr($q, substr($name, 0, strlen($q))))
+        {
+            if($suggestion == "")
+            {
+                $suggestion = $name;
+            }
+            else
+            {
+                $suggestion .= ", " . $name;
+            }
+        }
+    }
+}
+
+// Output
+if($suggestion == "")
+{
+    echo "No suggestion";
+}
+else
+{
+    echo $suggestion;
+}
+?>

@@ -1,0 +1,47 @@
+*emp database
+CREATE TABLE employee (
+    emp_no INT PRIMARY KEY,
+    emp_name VARCHAR(50),
+    address VARCHAR(100),
+    salary INT
+);
+
+INSERT INTO employee VALUES
+(1, 'Rahul', 'Pune', 60000),
+(2, 'Sneha', 'Mumbai', 45000),
+(3, 'Amit', 'Nashik', 70000),
+(4, 'Priya', 'Nagpur', 30000),
+(5, 'Karan', 'Delhi', 80000);
+
+*employee.php
+<?php
+$conn = mysqli_connect("localhost", "root", "", "test");
+
+if(!$conn)
+{
+    die("Connection Failed");
+}
+
+$query = "SELECT * FROM employee WHERE salary > 50000";
+$result = mysqli_query($conn, $query);
+
+echo "<table border='1'>
+<tr>
+<th>Emp No</th>
+<th>Name</th>
+<th>Address</th>
+<th>Salary</th>
+</tr>";
+
+while($row = mysqli_fetch_assoc($result))
+{
+    echo "<tr>";
+    echo "<td>".$row['emp_no']."</td>";
+    echo "<td>".$row['emp_name']."</td>";
+    echo "<td>".$row['address']."</td>";
+    echo "<td>".$row['salary']."</td>";
+    echo "</tr>";
+}
+
+echo "</table>";
+?>

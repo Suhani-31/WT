@@ -1,0 +1,47 @@
+*page1.php
+
+<form method="post" action="page2.php">
+    Font Style: <input type="text" name="style"><br><br>
+    Font Size: <input type="text" name="size"><br><br>
+    Font Color: <input type="text" name="color"><br><br>
+    Background Color: <input type="text" name="bg"><br><br>
+
+    <input type="submit" value="Save Preferences">
+</form>
+
+*page2.php
+<?php
+// Set cookies (valid for 1 hour)
+setcookie("style", $_POST['style'], time()+3600);
+setcookie("size", $_POST['size'], time()+3600);
+setcookie("color", $_POST['color'], time()+3600);
+setcookie("bg", $_POST['bg'], time()+3600);
+
+echo "<h2>Saved Preferences</h2>";
+
+echo "Font Style: " . $_POST['style'] . "<br>";
+echo "Font Size: " . $_POST['size'] . "<br>";
+echo "Font Color: " . $_POST['color'] . "<br>";
+echo "Background Color: " . $_POST['bg'] . "<br><br>";
+
+echo "<a href='page3.php'>Go to Page 3</a>";
+?>
+
+
+*page3.php
+<?php
+$style = $_COOKIE['style'];
+$size = $_COOKIE['size'];
+$color = $_COOKIE['color'];
+$bg = $_COOKIE['bg'];
+?>
+
+<body style="background-color: <?php echo $bg; ?>;">
+    <p style="
+        font-family: <?php echo $style; ?>;
+        font-size: <?php echo $size; ?>px;
+        color: <?php echo $color; ?>;
+    ">
+        This is your customized web page!
+    </p>
+</body>
