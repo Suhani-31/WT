@@ -15,7 +15,7 @@ INSERT INTO employee VALUES
 
 *employee.php
 <?php
-$conn = mysqli_connect("localhost", "root", "", "test");
+$conn = pg_connect("host=localhost dbname=test user=postgres password=yourpassword");
 
 if(!$conn)
 {
@@ -23,7 +23,7 @@ if(!$conn)
 }
 
 $query = "SELECT * FROM employee WHERE salary > 50000";
-$result = mysqli_query($conn, $query);
+$result = pg_query($conn, $query);
 
 echo "<table border='1'>
 <tr>
@@ -33,7 +33,7 @@ echo "<table border='1'>
 <th>Salary</th>
 </tr>";
 
-while($row = mysqli_fetch_assoc($result))
+while($row = pg_fetch_assoc($result))
 {
     echo "<tr>";
     echo "<td>".$row['emp_no']."</td>";
