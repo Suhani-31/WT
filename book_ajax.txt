@@ -101,3 +101,7 @@ foreach($xml->book as $b)
 
 echo "</table>";
 ?>
+
+
+on terminal:php-s localhost:8080
+then run: http://localhost/index.html
